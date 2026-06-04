@@ -1,0 +1,11 @@
+# Elastic data
+esdata/
+
+# Logs generated at runtime
+logs/
+
+# macOS
+.DS_Store
+
+# Notes perso
+notes/linux-windows-siem-ebpf.txt

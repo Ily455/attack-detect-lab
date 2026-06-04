@@ -1,0 +1,107 @@
+{
+    "name": "attack-detect-lab",
+    "versions": {
+        "attack": "19",
+        "navigator": "5.1.0",
+        "layer": "4.5"
+    },
+    "domain": "enterprise-attack",
+    "description": "Coverage map for attack-detect-lab — 6 MITRE ATT&CK techniques simulated with Atomic Red Team and detected with Elastic SIEM. Target: Ubuntu 22.04 ARM64 (UTM VM). Logging: auditd + Filebeat. Detection: KQL rules in Kibana Security.",
+    "filters": {
+        "platforms": ["Linux"]
+    },
+    "techniques": [
+        {
+            "techniqueID": "T1059.004",
+            "tactic": "execution",
+            "score": 100,
+            "color": "#5b9bd5",
+            "comment": "15/17 Atomic tests passed. auditd captured every shell invocation via execve. KQL: message: type=EXECVE AND (a0=sh OR a0=bash OR a0=dash)",
+            "enabled": true,
+            "metadata": [
+                {"name": "tests_passed", "value": "15/17"},
+                {"name": "log_source", "value": "auditd execve"},
+                {"name": "alert_count", "value": "570"}
+            ]
+        },
+        {
+            "techniqueID": "T1053.003",
+            "tactic": "persistence",
+            "score": 100,
+            "color": "#5b9bd5",
+            "comment": "4/4 Atomic tests passed. Key evidence: crontab loaded from /tmp/persistevil. KQL: message: type=EXECVE AND a0=crontab",
+            "enabled": true,
+            "metadata": [
+                {"name": "tests_passed", "value": "4/4"},
+                {"name": "log_source", "value": "auditd execve"},
+                {"name": "alert_count", "value": "6"}
+            ]
+        },
+        {
+            "techniqueID": "T1136.001",
+            "tactic": "persistence",
+            "score": 100,
+            "color": "#5b9bd5",
+            "comment": "2/5 Linux-relevant tests passed (FreeBSD and kubectl tests excluded). Includes creation of a UID=0 account. KQL: message: type=EXECVE AND (a0=useradd OR a0=adduser)",
+            "enabled": true,
+            "metadata": [
+                {"name": "tests_passed", "value": "2/5 (Linux-relevant)"},
+                {"name": "log_source", "value": "auditd execve"},
+                {"name": "alert_count", "value": "4"}
+            ]
+        },
+        {
+            "techniqueID": "T1087.001",
+            "tactic": "discovery",
+            "score": 100,
+            "color": "#5b9bd5",
+            "comment": "4/4 tests passed. Commands: cat /etc/passwd, cat /etc/shadow, lsof, getent passwd. KQL: message: type=EXECVE AND (a1=/etc/passwd OR a1=/etc/shadow OR a0=lsof)",
+            "enabled": true,
+            "metadata": [
+                {"name": "tests_passed", "value": "4/4"},
+                {"name": "log_source", "value": "auditd execve"},
+                {"name": "alert_count", "value": "4"}
+            ]
+        },
+        {
+            "techniqueID": "T1083",
+            "tactic": "discovery",
+            "score": 100,
+            "color": "#5b9bd5",
+            "comment": "3/3 tests passed. Commands: find, showmount, tree. KQL: message: type=EXECVE AND (a0=find OR a0=showmount OR a0=tree)",
+            "enabled": true,
+            "metadata": [
+                {"name": "tests_passed", "value": "3/3"},
+                {"name": "log_source", "value": "auditd execve"},
+                {"name": "alert_count", "value": "45"}
+            ]
+        },
+        {
+            "techniqueID": "T1105",
+            "tactic": "command-and-control",
+            "score": 100,
+            "color": "#5b9bd5",
+            "comment": "7/9 tests passed. Covers rsync push/pull, scp push/pull, sftp push, curl download+execute. Dedicated remote container added as staging server. KQL: message: type=EXECVE AND (a0=curl OR a0=wget OR a0=rsync OR a0=scp)",
+            "enabled": true,
+            "metadata": [
+                {"name": "tests_passed", "value": "7/9"},
+                {"name": "log_source", "value": "auditd execve"},
+                {"name": "alert_count", "value": "15"}
+            ]
+        }
+    ],
+    "gradient": {
+        "colors": ["#f0f0f0", "#5b9bd5"],
+        "minValue": 0,
+        "maxValue": 100
+    },
+    "legendItems": [
+        {"label": "Simulated & Detected", "color": "#5b9bd5"}
+    ],
+    "showTacticRowBackground": true,
+    "tacticRowBackground": "#15191e",
+    "selectTechniquesAcrossTactics": false,
+    "selectSubtechniquesWithParent": false,
+    "metadata": [],
+    "links": []
+}

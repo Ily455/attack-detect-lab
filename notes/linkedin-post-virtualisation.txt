@@ -1,0 +1,9 @@
+The Type 1 / Type 2 hypervisor classification has a gap.
+Type 1 boots before the OS and claims hardware directly — ESXi, Xen. Type 2 runs on top of the OS and goes through it — classic VirtualBox, VMware Workstation. The distinction is architectural: where the hypervisor sits relative to the OS. Not about emulation — both types use hardware virtualization extensions when available.
+The gap is KVM, Hyper-V, and Apple's Hypervisor.framework. They run inside the OS kernel, so they're hosted like a Type 2. But the kernel isn't a middleman here — it's the hypervisor. They access CPU virtualization extensions directly, like a Type 1. KVM has been in the Linux kernel since 2007. Hyper-V is built into Windows. Hypervisor.framework is part of XNU. These aren't add-ons — they're the kernel exposing CPU virtualization instructions directly to applications that need to create VMs.
+
+VMware and VirtualBox on modern systems use them under the hood. Tools people think of as "Type 2" are themselves sitting on top of this.
+Some call this "Type 1.5." The label doesn't matter. What matters is that the classification predates this pattern and doesn't describe it well.
+I ran into this practically: Docker on an M3 Mac needs a Linux VM. What creates it is Hypervisor.framework — kernel-integrated, hardware-accelerated, minimal overhead. Same story on Linux with KVM, same on Windows with Hyper-V. One level of virtualization, not two.
+Containers are a separate thing. No emulated hardware, no isolated kernel — just Linux namespaces and cgroups. A container is a process. The kernel is fully shared. That's why containers start in milliseconds and VMs take minutes.
+The model taught in most courses isn't wrong. It just stops before this part.

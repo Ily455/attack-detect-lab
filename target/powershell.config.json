@@ -1,0 +1,6 @@
+{
+    "ScriptBlockLogging": {
+        "EnableScriptBlockLogging": true,
+        "EnableScriptBlockInvocationLogging": true
+    }
+}

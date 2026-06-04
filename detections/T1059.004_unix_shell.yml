@@ -1,0 +1,29 @@
+title: Unix Shell Execution via Atomic Red Team T1059.004
+id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+status: experimental
+description: Detects Unix shell execution patterns matching MITRE ATT&CK T1059.004 — command and scripting interpreter via bash/sh.
+references:
+  - https://attack.mitre.org/techniques/T1059/004/
+author: Ilyass El Annid
+date: 2026-06-03
+tags:
+  - attack.execution
+  - attack.t1059.004
+logsource:
+  product: linux
+  service: auditd
+detection:
+  selection_execve:
+    type: EXECVE
+  selection_shell:
+    a0|contains:
+      - 'sh'
+      - 'bash'
+      - 'dash'
+  selection_flag:
+    a1: '-c'
+  condition: selection_execve and selection_shell and selection_flag
+falsepositives:
+  - Legitimate shell scripts run by administrators
+  - System services invoking shell commands
+level: medium

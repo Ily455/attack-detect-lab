@@ -1,0 +1,23 @@
+title: Cron Persistence via Scheduled Task T1053.003
+id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+status: experimental
+description: Detects cron-based persistence techniques matching MITRE ATT&CK T1053.003 — writes to cron directories or crontab modification by non-system processes.
+references:
+  - https://attack.mitre.org/techniques/T1053/003/
+author: Ilyass El Annid
+date: 2026-06-03
+tags:
+  - attack.persistence
+  - attack.t1053.003
+logsource:
+  product: linux
+  service: auditd
+detection:
+  selection:
+    type: EXECVE
+    a0: 'crontab'
+  condition: selection
+falsepositives:
+  - Legitimate cron job management by administrators
+  - Package manager installing cron jobs
+level: medium

@@ -1,0 +1,32 @@
+title: Local Account Discovery T1087.001
+id: d4e5f6a7-b8c9-0123-defa-234567890123
+status: experimental
+description: Detects local account enumeration via common Linux commands — MITRE ATT&CK T1087.001.
+references:
+  - https://attack.mitre.org/techniques/T1087/001/
+author: Ilyass El Annid
+date: 2026-06-03
+tags:
+  - attack.discovery
+  - attack.t1087.001
+logsource:
+  product: linux
+  service: auditd
+detection:
+  selection_passwd:
+    type: EXECVE
+    a0: 'cat'
+    a1|contains:
+      - '/etc/passwd'
+      - '/etc/shadow'
+      - '/etc/group'
+  selection_enum:
+    type: EXECVE
+    a0|contains:
+      - 'getent'
+      - 'lsof'
+  condition: selection_passwd or selection_enum
+falsepositives:
+  - System monitoring tools
+  - Legitimate administrator activity
+level: low

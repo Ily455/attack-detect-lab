@@ -1,0 +1,41 @@
+filebeat.inputs:
+
+  - type: log
+    id: attack-sim-logs
+    enabled: true
+    paths:
+      - /hostlogs/*.log
+    fields:
+      log_source: attack-sim
+    fields_under_root: true
+    ignore_older: 2h
+    # preserve technique ID from filename as a field
+    scan_frequency: 5s
+
+processors:
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  - add_fields:
+      target: ''
+      fields:
+        lab: attack-detect-lab
+  - drop_fields:
+      fields: ["agent.ephemeral_id", "log.offset"]
+      ignore_missing: true
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  username: "elastic"
+  password: "changeme"
+  index: "attack-detect-logs-%{+yyyy.MM.dd}"
+
+setup.ilm.enabled: false
+
+setup.template.name: "attack-detect-logs"
+setup.template.pattern: "attack-detect-logs-*"
+setup.template.settings:
+  index.number_of_shards: 1
+  index.number_of_replicas: 0
+
+logging.level: info
+logging.to_files: false

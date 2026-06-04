@@ -1,0 +1,41 @@
+## Delete all existing rules
+-D
+
+## Buffer size — increase if events are lost under load
+-b 8192
+
+## Failure mode: 1 = log to syslog, 2 = kernel panic
+-f 1
+
+## Log all process execution (execve syscall)
+-a always,exit -F arch=b64 -S execve -k exec
+-a always,exit -F arch=b32 -S execve -k exec
+
+## Shell spawned from unusual parents (awk, find, perl, python, etc.)
+-w /bin/bash -p x -k shell_exec
+-w /bin/sh -p x -k shell_exec
+-w /usr/bin/awk -p x -k lolbin_exec
+-w /usr/bin/find -p x -k lolbin_exec
+-w /usr/bin/python3 -p x -k lolbin_exec
+-w /usr/bin/perl -p x -k lolbin_exec
+
+## Activity in /tmp (scripts dropped and executed)
+-w /tmp -p wxa -k tmp_activity
+
+## User and account management
+-w /etc/passwd -p wa -k account_change
+-w /etc/shadow -p wa -k account_change
+-w /usr/sbin/useradd -p x -k useradd
+-w /usr/sbin/userdel -p x -k userdel
+
+## Cron modifications
+-w /etc/cron.d -p wa -k cron_change
+-w /etc/crontab -p wa -k cron_change
+-w /var/spool/cron -p wa -k cron_change
+
+## Network downloads
+-w /usr/bin/curl -p x -k download
+-w /usr/bin/wget -p x -k download
+
+## Make rules immutable until reboot
+-e 2

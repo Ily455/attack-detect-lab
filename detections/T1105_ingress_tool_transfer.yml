@@ -1,0 +1,26 @@
+title: Ingress Tool Transfer T1105
+id: f6a7b8c9-d0e1-2345-fabc-456789012345
+status: experimental
+description: Detects file download and execution via curl or wget — MITRE ATT&CK T1105.
+references:
+  - https://attack.mitre.org/techniques/T1105/
+author: Ilyass El Annid
+date: 2026-06-04
+tags:
+  - attack.command-and-control
+  - attack.t1105
+logsource:
+  product: linux
+  service: auditd
+detection:
+  selection:
+    type: EXECVE
+    a0|contains:
+      - 'curl'
+      - 'wget'
+  condition: selection
+falsepositives:
+  - Package managers
+  - Legitimate software update scripts
+  - System health checks
+level: low

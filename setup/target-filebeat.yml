@@ -1,0 +1,65 @@
+filebeat.inputs:
+
+  - type: log
+    id: auth-log
+    enabled: true
+    paths:
+      - /var/log/auth.log
+    fields:
+      log_source: auth
+      target: linux-container
+    fields_under_root: true
+
+  - type: log
+    id: syslog
+    enabled: true
+    paths:
+      - /var/log/syslog
+    fields:
+      log_source: syslog
+      target: linux-container
+    fields_under_root: true
+
+  - type: log
+    id: cron-log
+    enabled: true
+    paths:
+      - /var/log/cron.log
+    fields:
+      log_source: cron
+      target: linux-container
+    fields_under_root: true
+
+  - type: log
+    id: pwsh-scriptblock
+    enabled: true
+    paths:
+      - /var/log/syslog
+    fields:
+      log_source: syslog
+      target: linux-container
+    fields_under_root: true
+
+processors:
+  - add_host_metadata: ~
+  - add_fields:
+      target: ''
+      fields:
+        lab: attack-detect-lab
+
+output.elasticsearch:
+  hosts: ["http://elasticsearch:9200"]
+  username: "elastic"
+  password: "changeme"
+  index: "attack-detect-logs-%{+yyyy.MM.dd}"
+
+setup.ilm.enabled: false
+
+setup.template.name: "attack-detect-logs"
+setup.template.pattern: "attack-detect-logs-*"
+setup.template.settings:
+  index.number_of_shards: 1
+  index.number_of_replicas: 0
+
+logging.level: info
+logging.to_files: false

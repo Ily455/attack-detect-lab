@@ -1,0 +1,32 @@
+title: File and Directory Discovery T1083
+id: e5f6a7b8-c9d0-1234-efab-345678901234
+status: experimental
+description: Detects filesystem enumeration via find, tree, or network share discovery via showmount — MITRE ATT&CK T1083.
+references:
+  - https://attack.mitre.org/techniques/T1083/
+author: Ilyass El Annid
+date: 2026-06-03
+tags:
+  - attack.discovery
+  - attack.t1083
+logsource:
+  product: linux
+  service: auditd
+detection:
+  selection_find:
+    type: EXECVE
+    a0: 'find'
+    a1|contains:
+      - '/'
+  selection_shares:
+    type: EXECVE
+    a0: 'showmount'
+  selection_tree:
+    type: EXECVE
+    a0: 'tree'
+  condition: selection_find or selection_shares or selection_tree
+falsepositives:
+  - Package managers and system tools using find
+  - Backup scripts
+  - Legitimate administrator enumeration
+level: low
