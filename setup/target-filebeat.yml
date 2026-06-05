@@ -48,7 +48,7 @@ processors:
         lab: attack-detect-lab
 
 output.elasticsearch:
-  hosts: ["http://elasticsearch:9200"]
+  hosts: ["http://192.168.64.1:9200"]
   username: "elastic"
   password: "changeme"
   index: "attack-detect-logs-%{+yyyy.MM.dd}"
