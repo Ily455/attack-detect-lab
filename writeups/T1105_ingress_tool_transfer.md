@@ -37,7 +37,7 @@ Adversaries transfer tools or files from an external system into a compromised e
 
 A dedicated `remote` container (Ubuntu + SSH + rsync) was added to the lab to enable the transfer tests. The VM connects to it via SSH config alias `victim-host → 192.168.64.1:2223`, with key-based authentication to allow non-interactive rsync/scp/sftp.
 
-2 tests failed: test 14 (whois returns exit code 2 — connected but response not valid whois format), test 39 (kubectl not installed — out of scope)..
+2 tests failed: test 14 (whois binary not installed on target — exit code 127), test 39 (kubectl not installed — out of scope).
 
 ---
 
