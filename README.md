@@ -376,6 +376,14 @@ Writeups in `writeups/` document the evidence, KQL queries, and detection logic 
 
 ---
 
+## Known Gaps / Planned Improvements
+
+- **Prerequisite validation** — `-GetPrereqs` was not run before tests. Some failures may be due to missing dependencies (e.g. `AutoSUID.sh`, `LinEnum.sh`) rather than detection gaps. Next step: run `-GetPrereqs` first and re-test after resolving missing deps.
+- **Test filtering** — all sub-tests were run without `-TestNumbers` to exclude irrelevant ones (FreeBSD-specific, kubectl). Next step: curate a per-technique list of applicable test numbers.
+- **Structured reporting** — results were validated by reading terminal output and counting Kibana alerts. Next step: use Atomic's built-in reporting or export results in a structured format for better traceability.
+
+---
+
 ## Cleanup
 
 Stop Docker services (removes volumes and data):
