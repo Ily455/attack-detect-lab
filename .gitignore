@@ -9,3 +9,6 @@ logs/
 
 # Notes perso
 notes/linux-windows-siem-ebpf.txt
+
+# Claude Code context (local only)
+CLAUDE.md
